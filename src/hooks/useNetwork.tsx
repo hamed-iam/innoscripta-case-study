@@ -16,6 +16,7 @@ interface ReqHook<T> {
 // Should be moved to a lib file and config with interceptors, would be overkill here.
 // axios.defaults.baseURL = "https://jsonplaceholder.typicode.com";
 
+const nytimesapikey = "PrahXFIItbtPnEqzDancuCdJItdMtUHO";
 export default function useNetwork<T>(
   endPoint: string,
   options = {}

@@ -9,10 +9,10 @@ function App() {
   const [search, setSearch] = useState("apple");
   const [filters, setFilters] = useState({
     q: search,
-    from: "",
-    to: "",
-    category: "general",
-    sources: "",
+    // from: "",
+    // to: "",
+    // category: "general",
+    // sources: "",
   });
 
   const { data, onRefetch, loading } = useNetwork(
@@ -40,6 +40,11 @@ function App() {
     });
   };
 
+  const filteredItems = data?.articles?.filter(
+    (article: any) =>
+      article?.title !== "[Removed]" && article?.source?.name !== "[Removed]"
+  );
+
   return (
     <>
       <Filters
@@ -60,7 +65,7 @@ function App() {
                   <LoadingCard />
                 </div>
               ))
-          : data?.articles.map((item) => (
+          : filteredItems?.map((item) => (
               <div
                 key={item.id}
                 className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/4 p-2"
