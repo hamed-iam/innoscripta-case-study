@@ -17,6 +17,12 @@ interface ReqHook<T> {
 // axios.defaults.baseURL = "https://jsonplaceholder.typicode.com";
 
 const nytimesapikey = "PrahXFIItbtPnEqzDancuCdJItdMtUHO";
+const guardianapikey = "38ed4779-52a7-4d65-957c-23c1b5ba170b";
+
+const newYorkTimesArticlesUrl = `https://api.nytimes.com/svc/news/v3/content/all/all.json?api-key=${nytimesapikey}`;
+
+const theGuardianAPiUrl = `https://content.guardianapis.com/search?&page-size=20&show-fields=thumbnail&api-key=${guardianapikey}`;
+
 export default function useNetwork<T>(
   endPoint: string,
   options = {}
