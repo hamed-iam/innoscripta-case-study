@@ -1,6 +1,7 @@
 import { Typography } from "antd";
 import { useState } from "react";
 import { LinkOutlined } from "@ant-design/icons";
+import ImageWithFallback from "./ImageWithFallback";
 
 const { Title } = Typography;
 
@@ -31,7 +32,12 @@ const NewsCard = ({ article }: NewsCardProps) => {
         >
           {article.description}
         </Typography.Paragraph>
-        {article.urlToImage && <img alt="example" src={article.urlToImage} />}
+
+        <ImageWithFallback
+          src={article.urlToImage}
+          fallbackSrc="/src/assets/news-ph.png"
+          alt="Description of your image"
+        />
       </div>
 
       <div>
@@ -48,7 +54,7 @@ const NewsCard = ({ article }: NewsCardProps) => {
       </div>
 
       <div className="flex justify-between">
-        <p>{article.author}</p>
+        <p>{article.source.name}</p>
         <a href={article.url} target="_blank">
           <LinkOutlined />
         </a>
