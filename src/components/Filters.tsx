@@ -1,19 +1,17 @@
 import { Button, DatePicker, Drawer, Input, Select } from "antd";
-import { CATEGORIES } from "../constants";
+import { CATEGORIES, SOURCES } from "../constants";
 import { ChangeEventHandler, useState } from "react";
 import { FilterOutlined } from "@ant-design/icons";
 interface FiltersProps {
   loading: boolean;
   search: string;
-  onFilterChange: (_val: string, _cat: string) => void;
+  onFilterChange: (_val: string | string[], _cat: string) => void;
   onSearch: ChangeEventHandler<HTMLInputElement>;
-  sourcesData: any;
   onRefetch: () => void;
 }
 
 export default function Filters({
   search,
-  sourcesData,
   loading,
   onFilterChange,
   onRefetch,
@@ -62,10 +60,7 @@ export default function Filters({
               placeholder="Select Sources"
               loading={loading}
               onChange={(e) => onFilterChange(e, "source")}
-              options={sourcesData?.sources.map((source) => ({
-                label: source.name,
-                value: source.id,
-              }))}
+              options={SOURCES}
             />
             <DatePicker
               onChange={(_, e) => onFilterChange(e, "from")}

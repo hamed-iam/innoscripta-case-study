@@ -4,6 +4,7 @@ import { useNetwork } from "./hooks";
 import LoadingCard from "./components/LoadingCard";
 import NewsCard from "./components/NewsCard";
 import Filters from "./components/Filters";
+import type { NewsApi } from "./types";
 
 function App() {
   const [search, setSearch] = useState("apple");
@@ -15,7 +16,7 @@ function App() {
     // sources: "",
   });
 
-  const { data, onRefetch, loading } = useNetwork(
+  const { data, onRefetch, loading } = useNetwork<NewsApi>(
     "https://newsapi.org/v2/top-headlines",
     {
       params: {
@@ -24,16 +25,11 @@ function App() {
     }
   );
 
-  const { data: sourcesData, loading: isSourcesLoading } = useNetwork(
-    "https://newsapi.org/v2/top-headlines/sources"
-  );
-
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  const handleFilterChange = (event: string, filter: string) => {
-    console.log("event :>> ", event);
+  const handleFilterChange = (event: string | string[], filter: string) => {
     setFilters({
       ...filters,
       [filter]: event,
@@ -41,16 +37,15 @@ function App() {
   };
 
   const filteredItems = data?.articles?.filter(
-    (article: any) =>
+    (article) =>
       article?.title !== "[Removed]" && article?.source?.name !== "[Removed]"
   );
 
   return (
     <>
       <Filters
-        loading={isSourcesLoading}
+        loading={loading}
         search={search}
-        sourcesData={sourcesData}
         onFilterChange={handleFilterChange}
         onRefetch={onRefetch}
         onSearch={handleSearch}
@@ -67,10 +62,10 @@ function App() {
               ))
           : filteredItems?.map((item) => (
               <div
-                key={item.id}
+                key={item.source.id}
                 className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/4 p-2"
               >
-                <NewsCard article={item} />
+                <NewsCard {...item} />
               </div>
             ))}
       </div>

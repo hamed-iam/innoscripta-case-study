@@ -2,26 +2,11 @@ import { Typography } from "antd";
 import { useState } from "react";
 import { LinkOutlined } from "@ant-design/icons";
 import ImageWithFallback from "./ImageWithFallback";
+import type { NewsItem } from "../types";
 
 const { Title } = Typography;
 
-interface NewsCardProps {
-  article: {
-    source: {
-      id: number | string;
-      name: string;
-    };
-    author: string;
-    title: string;
-    description: string;
-    url: string;
-    urlToImage: string;
-    publishedAt: Date;
-    content: string;
-  };
-}
-
-const NewsCard = ({ article }: NewsCardProps) => {
+const NewsCard = ({ ...article }: NewsItem) => {
   const [expanded, setExpanded] = useState(false);
   return (
     <div className="border rounded p-2 min-h-[200px]">
