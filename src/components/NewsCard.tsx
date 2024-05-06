@@ -2,31 +2,53 @@ import { Typography } from "antd";
 import { useState } from "react";
 import { LinkOutlined } from "@ant-design/icons";
 import ImageWithFallback from "./ImageWithFallback";
-import type { NewsItem } from "../types";
+import type { NewsApiItem, GuardiansItem, NyTimesItem } from "../types";
 
-const { Title } = Typography;
+type Article = NewsApiItem & GuardiansItem & NyTimesItem;
 
-const NewsCard = ({ ...article }: NewsItem) => {
+const { Title, Paragraph } = Typography;
+
+const NewsCard = (article: Article) => {
   const [expanded, setExpanded] = useState(false);
+
+  if (article?.title === "[Removed]" && article?.source?.name === "[Removed]")
+    return;
+
+  const renderImage = () => {
+    if (article.multimedia?.length > 0) {
+      const mediumThreeByTwo440 = article.multimedia.find(
+        (i) => i.format === "mediumThreeByTwo440"
+      );
+      return (
+        <ImageWithFallback
+          src={mediumThreeByTwo440?.url || ""}
+          fallbackSrc="/src/assets/news-ph.png"
+          alt="innoscripta news"
+        />
+      );
+    }
+    return (
+      <ImageWithFallback
+        src={article.urlToImage || article.fields?.thumbnail || ""}
+        fallbackSrc="/src/assets/news-ph.png"
+        alt="innoscripta news"
+      />
+    );
+  };
+
   return (
     <div className="border rounded p-2 min-h-[200px]">
       <div>
-        <Title level={4}>{article.title}</Title>
-        <Typography.Paragraph
+        <Title level={4}>{article.title || article.webTitle}</Title>
+        <Paragraph
           className={`overflow-hidden line-clamp-${expanded ? "none" : "3"}`}
         >
           {article.description}
-        </Typography.Paragraph>
-
-        <ImageWithFallback
-          src={article.urlToImage}
-          fallbackSrc="/src/assets/news-ph.png"
-          alt="Description of your image"
-        />
+        </Paragraph>
+        {renderImage()}
       </div>
-
       <div>
-        <Typography.Paragraph
+        <Paragraph
           ellipsis={{
             rows: 2,
             expandable: "collapsible",
@@ -35,12 +57,15 @@ const NewsCard = ({ ...article }: NewsItem) => {
           }}
         >
           {article.content}
-        </Typography.Paragraph>
+        </Paragraph>
       </div>
-
       <div className="flex justify-between">
-        <p>{article.source.name}</p>
-        <a href={article.url} target="_blank">
+        <p>{article.source?.name || article?.source || article?.sectionName}</p>
+        <a
+          href={article.url || article.apiUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <LinkOutlined />
         </a>
       </div>

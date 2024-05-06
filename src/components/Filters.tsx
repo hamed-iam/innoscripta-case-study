@@ -1,23 +1,20 @@
-import { Button, DatePicker, Drawer, Input, Select } from "antd";
+import { Button, DatePicker, Drawer, Select } from "antd";
 import { CATEGORIES, SOURCES } from "../constants";
-import { ChangeEventHandler, useState } from "react";
+import { useState } from "react";
 import { FilterOutlined } from "@ant-design/icons";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import CustomInput from "./CustomInput";
+import dayjs from "dayjs";
+
 interface FiltersProps {
   loading: boolean;
-  search: string;
-  onFilterChange: (_val: string | string[], _cat: string) => void;
-  onSearch: ChangeEventHandler<HTMLInputElement>;
-  onRefetch: () => void;
+  onSubmit: SubmitHandler<FieldValues>;
 }
 
-export default function Filters({
-  search,
-  loading,
-  onFilterChange,
-  onRefetch,
-  onSearch,
-}: FiltersProps) {
+export default function Filters({ loading, onSubmit }: FiltersProps) {
   const [open, setOpen] = useState(false);
+  const { handleSubmit, setValue, control, watch } = useForm();
+
   return (
     <>
       <nav className="backdrop-blur-lg bg-opacity-40 py-4 sticky top-0 z-50">
@@ -45,35 +42,48 @@ export default function Filters({
         onClose={() => setOpen(false)}
         open={open}
       >
-        <div className="flex flex-wrap justify-center">
-          <div className="w-full flex flex-col gap-4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-2">
-            <Input value={search} onChange={onSearch} />
-            <Select
-              onChange={(e) => onFilterChange(e, "category")}
-              placeholder="Select category"
-              options={CATEGORIES}
-            />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-wrap justify-center">
+            <div className="w-full flex flex-col gap-4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-2">
+              <CustomInput
+                name="search"
+                control={control}
+                placeholder="Search news"
+                type="text"
+              />
+              <Select
+                onChange={(e) => setValue("category", e)}
+                placeholder="Select category"
+                options={CATEGORIES}
+              />
 
-            <Select
-              mode="multiple"
-              allowClear
-              placeholder="Select Sources"
-              loading={loading}
-              onChange={(e) => onFilterChange(e, "source")}
-              options={SOURCES}
-            />
-            <DatePicker
-              onChange={(_, e) => onFilterChange(e, "from")}
-              placeholder="From"
-            />
-            <DatePicker
-              onChange={(_, e) => onFilterChange(e, "to")}
-              placeholder="To"
-            />
+              <Select
+                mode="multiple"
+                allowClear
+                placeholder="Select Sources"
+                loading={loading}
+                onChange={(e) => setValue("source", e)}
+                options={SOURCES}
+              />
+              <DatePicker
+                onChange={(_, e) => setValue("from", e)}
+                placeholder="From"
+                disabledDate={(e) => dayjs().isBefore(e)}
+              />
+              <DatePicker
+                onChange={(_, e) => setValue("to", e)}
+                placeholder="To"
+                disabled={!watch("from")}
+                disabledDate={(e) =>
+                  dayjs(e).isBefore(watch("from")) ||
+                  dayjs(e).isAfter(dayjs().endOf("day"))
+                }
+              />
 
-            <Button onClick={onRefetch}>Search</Button>
+              <Button htmlType="submit">Search</Button>
+            </div>
           </div>
-        </div>
+        </form>
       </Drawer>
     </>
   );

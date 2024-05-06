@@ -13,16 +13,6 @@ interface ReqHook<T> {
   onRefetch: () => Promise<void>;
 }
 
-// Should be moved to a lib file and config with interceptors, would be overkill here.
-// axios.defaults.baseURL = "https://jsonplaceholder.typicode.com";
-
-const nytimesapikey = "PrahXFIItbtPnEqzDancuCdJItdMtUHO";
-const guardianapikey = "38ed4779-52a7-4d65-957c-23c1b5ba170b";
-
-const newYorkTimesArticlesUrl = `https://api.nytimes.com/svc/news/v3/content/all/all.json?api-key=${nytimesapikey}`;
-
-const theGuardianAPiUrl = `https://content.guardianapis.com/search?&page-size=20&show-fields=thumbnail&api-key=${guardianapikey}`;
-
 export default function useNetwork<T>(
   endPoint: string,
   options = {}
@@ -36,7 +26,6 @@ export default function useNetwork<T>(
     setLoading(true);
     try {
       const res: AxiosResponse<T> = await axios.get(endPoint, {
-        headers: { "x-api-key": "38b137ee8e90405d93db3c058c0ad4ff" },
         ...options,
       });
       setData(res.data);

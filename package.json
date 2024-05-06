@@ -10,11 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.34.2",
+    "@tanstack/react-query-devtools": "^5.34.2",
     "antd": "^5.16.5",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
