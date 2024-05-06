@@ -11,10 +11,11 @@ type NewsParam = {
 const fetchNewApi = async (params: NewsParam) => {
   try {
     const { data } = await axios.get("https://newsapi.org/v2/top-headlines", {
-      headers: {
-        "x-api-key": "38b137ee8e90405d93db3c058c0ad4ff",
-      },
+      // headers: {
+      //   "x-api-key": "38b137ee8e90405d93db3c058c0ad4ff",
+      // },
       params: {
+        "api-key": "38b137ee8e90405d93db3c058c0ad4ff",
         ...params,
       },
     });
