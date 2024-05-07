@@ -105,11 +105,35 @@ export default function Home() {
     }
   }, [isLoading]);
 
-  console.log("mainData", mainData);
+  const handleFilterSource = (filters: string[]) => {
+    let filteredData: any[] = [];
+
+    filters.forEach((filter) => {
+      switch (filter) {
+        case "newsapi":
+          filteredData = filteredData.concat(newsApiData.articles);
+          break;
+        case "guardian":
+          filteredData = filteredData.concat(guardiansData.response.results);
+          break;
+        case "nytimes":
+          filteredData = filteredData.concat(nyTimesData.response.docs);
+          break;
+        default:
+          break;
+      }
+    });
+
+    setMainData(filteredData);
+  };
 
   return (
     <>
-      <Filters loading={isLoading} onSubmit={handleFiltersSubmit} />
+      <Filters
+        loading={isLoading}
+        onSubmit={handleFiltersSubmit}
+        onFilterSource={handleFilterSource}
+      />
 
       <div className="flex flex-wrap justify-center gap-4">
         {isLoading

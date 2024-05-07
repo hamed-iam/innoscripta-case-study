@@ -9,9 +9,10 @@ import dayjs from "dayjs";
 interface FiltersProps {
   loading?: boolean;
   onSubmit: SubmitHandler<FieldValues>;
+  onFilterSource: (_source: string[]) => void;
 }
 
-export default function Filters({ onSubmit }: FiltersProps) {
+export default function Filters({ onSubmit, onFilterSource }: FiltersProps) {
   const [open, setOpen] = useState(false);
   const { handleSubmit, setValue, control, watch } = useForm();
 
@@ -45,7 +46,7 @@ export default function Filters({ onSubmit }: FiltersProps) {
               allowClear
               className="w-full mb-2"
               placeholder="Select Source"
-              onChange={() => {}}
+              onChange={onFilterSource}
               options={SOURCES}
             />
 
