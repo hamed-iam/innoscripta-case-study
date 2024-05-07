@@ -2,9 +2,9 @@ import { Typography } from "antd";
 import { useState } from "react";
 import { LinkOutlined } from "@ant-design/icons";
 import ImageWithFallback from "./ImageWithFallback";
-import type { NewsApiItem, GuardiansItem, NyTimesItem } from "../types";
+import type { NewsApiItem, GuardiansItem, NyArticleSearch } from "../types";
 
-type Article = NewsApiItem & GuardiansItem & NyTimesItem;
+type Article = NewsApiItem & GuardiansItem & NyArticleSearch & any;
 
 const { Title, Paragraph } = Typography;
 
@@ -16,12 +16,11 @@ const NewsCard = (article: Article) => {
 
   const renderImage = () => {
     if (article.multimedia?.length > 0) {
-      const mediumThreeByTwo440 = article.multimedia.find(
-        (i) => i.format === "mediumThreeByTwo440"
-      );
+      const biggestImage = article.multimedia[article.multimedia.length - 1];
+
       return (
         <ImageWithFallback
-          src={mediumThreeByTwo440?.url || ""}
+          src={biggestImage?.url || ""}
           fallbackSrc="/src/assets/news-ph.png"
           alt="innoscripta news"
         />
@@ -39,7 +38,9 @@ const NewsCard = (article: Article) => {
   return (
     <div className="border rounded p-2 min-h-[200px]">
       <div>
-        <Title level={4}>{article.title || article.webTitle}</Title>
+        <Title level={4}>
+          {article.title || article.webTitle || article.abstract}
+        </Title>
         <Paragraph
           className={`overflow-hidden line-clamp-${expanded ? "none" : "3"}`}
         >
@@ -56,7 +57,7 @@ const NewsCard = (article: Article) => {
             onExpand: (_, info) => setExpanded(info.expanded),
           }}
         >
-          {article.content}
+          {article.content || article.lead_paragraph}
         </Paragraph>
       </div>
       <div className="flex justify-between">

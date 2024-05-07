@@ -7,11 +7,11 @@ import CustomInput from "./CustomInput";
 import dayjs from "dayjs";
 
 interface FiltersProps {
-  loading: boolean;
+  loading?: boolean;
   onSubmit: SubmitHandler<FieldValues>;
 }
 
-export default function Filters({ loading, onSubmit }: FiltersProps) {
+export default function Filters({ onSubmit }: FiltersProps) {
   const [open, setOpen] = useState(false);
   const { handleSubmit, setValue, control, watch } = useForm();
 
@@ -36,54 +36,66 @@ export default function Filters({ loading, onSubmit }: FiltersProps) {
       </nav>
 
       <Drawer
-        title=""
         placement="top"
         closable={false}
         onClose={() => setOpen(false)}
         open={open}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-wrap justify-center">
-            <div className="w-full flex flex-col gap-4 md:w-1/2 lg:w-1/3 xl:w-1/4 p-2">
-              <CustomInput
-                name="search"
-                control={control}
-                placeholder="Search news"
-                type="text"
-              />
+        <div className="flex flex-col md:flex-row w-full md:px-12 space-y-4 md:space-y-0 md:space-x-4">
+          <div className="w-full md:w-2/4">
+            <p className="text-xl mb-2">Preference</p>
+            <Select
+              mode="multiple"
+              allowClear
+              className="w-full mb-2"
+              placeholder="Select Source"
+              onChange={() => {}}
+              options={SOURCES}
+            />
+
+            <Button>Save</Button>
+          </div>
+
+          <form
+            className="w-full md:w-2/4 flex flex-col gap-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <CustomInput
+              name="search"
+              control={control}
+              placeholder="Search news"
+              type="text"
+            />
+            <div className="flex flex-wrap justify-center gap-4">
               <Select
                 onChange={(e) => setValue("category", e)}
                 placeholder="Select category"
                 options={CATEGORIES}
               />
 
-              <Select
-                mode="multiple"
-                allowClear
-                placeholder="Select Sources"
-                loading={loading}
-                onChange={(e) => setValue("source", e)}
-                options={SOURCES}
-              />
-              <DatePicker
-                onChange={(_, e) => setValue("from", e)}
-                placeholder="From"
-                disabledDate={(e) => dayjs().isBefore(e)}
-              />
-              <DatePicker
-                onChange={(_, e) => setValue("to", e)}
-                placeholder="To"
-                disabled={!watch("from")}
-                disabledDate={(e) =>
-                  dayjs(e).isBefore(watch("from")) ||
-                  dayjs(e).isAfter(dayjs().endOf("day"))
-                }
-              />
+              <div className="flex gap-4">
+                <DatePicker
+                  onChange={(_, e) => setValue("from", e)}
+                  placeholder="From"
+                  disabledDate={(e) => dayjs().isBefore(e)}
+                />
+                <DatePicker
+                  onChange={(_, e) => setValue("to", e)}
+                  placeholder="To"
+                  disabled={!watch("from")}
+                  disabledDate={(e) =>
+                    dayjs(e).isBefore(watch("from")) ||
+                    dayjs(e).isAfter(dayjs().endOf("day"))
+                  }
+                />
+              </div>
 
-              <Button htmlType="submit">Search</Button>
+              <Button type="primary" htmlType="submit">
+                Search
+              </Button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </Drawer>
     </>
   );
