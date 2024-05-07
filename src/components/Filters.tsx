@@ -21,11 +21,7 @@ export default function Filters({ onSubmit }: FiltersProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex-shrink-0">
-              <img
-                src="/src/assets/news.png"
-                alt="news"
-                className="w-[150px]"
-              />
+              <img src="/news.png" alt="news" className="w-[150px]" />
             </div>
 
             <Button size="large" type="link" onClick={() => setOpen(true)}>

@@ -21,7 +21,7 @@ const NewsCard = (article: Article) => {
       return (
         <ImageWithFallback
           src={biggestImage?.url || ""}
-          fallbackSrc="/src/assets/news-ph.png"
+          fallbackSrc="/news-ph.png"
           alt="innoscripta news"
         />
       );
@@ -29,7 +29,7 @@ const NewsCard = (article: Article) => {
     return (
       <ImageWithFallback
         src={article.urlToImage || article.fields?.thumbnail || ""}
-        fallbackSrc="/src/assets/news-ph.png"
+        fallbackSrc="/news-ph.png"
         alt="innoscripta news"
       />
     );
